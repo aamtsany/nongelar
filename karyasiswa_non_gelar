@@ -1,0 +1,370 @@
+<div class="ks-page-content-body">
+	<div class="container-fluid">
+		<div class="ks-nav-body">
+			<div class="ks-nav-body-wrapper">
+				<div class="container-fluid">
+					<div id="toolbar" class="ks-datatable-toolbar">
+					<form>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#non_gelar_modal">
+							<span class="ks-icon la la-plus"></span>
+							<span class="ks-text">Tambah</span>
+						</button>
+					</form>
+					<table id="ks-table" class="table table-striped table-bordered" width="100%" data-pagination="true" data-search="true" data-sort-order="desc" data-toolbar="#toolbar"  data-mobile-responsive="true"  data-show-columns="true" data-show-export="true">
+						<thead>
+							<tr>
+								<!-- sesuai request -->
+								<th data-field="nip" data-sortable="true">NIP</th>
+								<th data-field="nama" data-sortable="true">Nama</th>
+								<th data-field="instansi" data-sortable="true">Instansi</th>
+								<th>AKSI</th>							
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							foreach ($karyasiswa as $pes) {
+								?>
+								<tr>
+									<!-- sesuaikan dg DB -->
+									<td>
+										<?php echo anchor('ppk/karyasiswa/data-diri/'.$pes->id_datadiri, $pes->id_datadiri)?>
+									</td>
+									<td><?php echo $pes->nama; ?></td>
+									<td><?php echo $pes->nama_inst; ?></td>
+									<td><a href="<?php echo site_url('ppk/Pengaturan/modNonGelar/').$pes->id_datadiri ?>" class="btn btn-sm btn-danger"> UPDATE</a></td>
+								</tr>
+								<?php
+							}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="non_gelar_modal" class="modal fade bd-example-modal" tabindex="-1" role="dialog" aria-labelledby="non_gelar_modal
+non_gelar_modal_label" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Form Input Pendaftaran</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="la la-close"></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<?php echo form_open('ppk/pengaturan/add'); ?>
+					<h5 class="modal-title">DATA DIRI</h5>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">NIP</label>
+						<div class="col-4"><input type="text" class="form-control" name="nip" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Nama</label>
+						<div class="col-10"><input type="text" class="form-control" name="nama" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Jenis Kelamin</label>
+						<div class="col-4">
+							<select name="gender" id="jenis_kelamin" class="form-control">
+								<option value="Laki-laki">--- Pilih Jeenis Kelamin ---</option>
+								<option value="Laki-laki">Laki-laki</option>
+								<option value="Perempuan">Perempuan</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Tanggal Lahir</label>
+						<div class="col-4"><input type="date" class="form-control" name="tgl_lahir" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Tempat Lahir</label>
+						<div class="col-4"><input type="text" class="form-control" name="tmp_lahir" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Alamat Rumah</label>
+						<div class="col">
+							<textarea class="form-control" rows="3" name="alamat_rmh"></textarea>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Provinsi</label>
+						<div class="col-4">
+							<select name="prop_rmh" id="prop_rmh" class="form-control" required="required">
+								<option value="" ></option>
+								<option value="" disabled="" selected="">--Pilih Provinsi--</option>
+								<?php foreach ($allProv as $key) { ?>
+									<option value="<?php echo $key->id; ?>"><?php echo $key->nama_prov; ?></option>
+								<?php } ?>
+							</select>
+						</div>	
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Kabupaten/Kota</label>
+						<div class="col-4">
+							<select name="kabkot_rmh" id="kabkot_rmh" class="form-control" required="required">
+								<option value="" ></option>
+								<option value="" disabled="" selected="">--Pilih Kabupaten/Kota--</option>
+								<?php foreach ($allKab as $key) { ?>
+									<option value="<?php echo $key->id; ?>"><?php echo $key->nama_kab; ?></option>
+								<?php } ?>
+							</select>
+						</div>	
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Kode Pos</label>
+						<div class="col-4"><input type="text" class="form-control" name="kodepos_rmh" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Nomor Telepon</label>
+						<div class="col-4"><input type="text" class="form-control" name="telp_rmh" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Nomor HP</label>
+						<div class="col-4"><input type="text" class="form-control" name="hp" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Email</label>
+						<div class="col-4"><input type="text" class="form-control" name="email" /></div>
+					</div>
+					<div></div>
+					<h5 class="modal-title">INSTANSI</h5>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Wilayah</label>
+						<div class="col-4">
+							<select name="wilayah" id="wilayah" class="form-control">
+								<option value="">--- Pilih Wilayah ---</option>
+								<option value="Pusat">Pusat</option>
+								<option value="Daerah">Daerah</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Nama Instansi</label>
+						<div class="col-4">
+							<select name="nama_inst" id="nama_inst" class="form-control" required="required">
+								<option value="" ></option>
+								<option value="" disabled="" selected="">--Pilih Instansi--</option>
+								<?php foreach ($allInst as $key) { ?>
+									<option value="<?php echo $key->id_inst; ?>"><?php echo $key->nam_inst; ?></option>
+								<?php } ?>
+							</select>
+						</div>	
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Unit Kerja</label>
+						<div class="col-4"><input type="text" class="form-control" name="unit_kerja" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Alamat Unit Kerja</label>
+						<div class="col">
+							<textarea class="form-control" rows="3" name="almt_inst"></textarea>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Kode Pos</label>
+						<div class="col-4"><input type="text" class="form-control" name="kodepos_inst" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">No Telp</label>
+						<div class="col-4"><input type="text" class="form-control" name="telp_inst" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">No Fax</label>
+						<div class="col-4"><input type="text" class="form-control" name="fax" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Kategori</label>
+						<div class="col-4">
+							<select name="wilayah" id="wilayah" class="form-control">
+								<option value="">--- Pilih Kategori ---</option>
+								<option value="PST">Pusat</option>
+								<option value="JW">Jawa</option>
+								<option value="LJW">Luar Jawa</option>
+								<option value="PST-LJW">Pusat - Luar Jawa</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">PNS Sejak</label>
+						<div class="col-4"><input type="date" class="form-control" name="tgl_pns" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Dokumen SK Penempatan PNS</label>
+						<div class="col-4"><input type="file" class="form-control" name="dokskpns" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Jabatan</label>
+						<div class="col-4"><input type="text" class="form-control" name="jabatan" /></div>
+						<div class="col-4">
+							<select name="jabatan" id="jabatan" class="form-control" required="required">
+								<option value="" ></option>
+								<option value="" disabled="" selected="">--Pilih Golongan--</option>
+								<?php foreach ($allGol as $key) { ?>
+									<option value="<?php echo $key->id_master; ?>"><?php echo $key->code; ?></option>
+								<?php } ?>
+							</select>
+						</div>	
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Dok SK Pangkat Jabatan Terakhir</label>
+						<div class="col-4"><input type="file" class="form-control" name="dokjabatan" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Unit/Bagian</label>
+						<div class="col-4"><input type="text" class="form-control" name="bagian" /></div>
+					</div>
+					<h5 class="modal-title">PENDIDIKAN</h5>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Pendidikan Terakhir</label>
+						<div class="col-4">
+							<select name="pnddkn" id="pnddkn" class="form-control" required="required">
+								<option value="" ></option>
+								<option value="" disabled="" selected="">--Pilih Pendididikan Akhir--</option>
+								<?php foreach ($allPendAkhir as $key) { ?>
+									<option value="<?php echo $key->id_master; ?>"><?php echo $key->code; ?></option>
+								<?php } ?>
+							</select>
+						</div>	
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Dokumen Ijazah</label>
+						<div class="col-4"><input type="file" class="form-control" name="dokijazah" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Perguruan Tinggi</label>
+						<div class="col-4"><input type="text" class="form-control" name="pt" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Fakultas</label>
+						<div class="col-4"><input type="text" class="form-control" name="fakultas" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Jurusan</label>
+						<div class="col-4"><input type="text" class="form-control" name="jurusan" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Tahun Lulus</label>
+						<div class="col-4"><input type="text" class="form-control" name="thn_lulus" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">IPK</label>
+						<div class="col-4"><input type="text" class="form-control" name="ipk" placeholder="(.) (contoh : 2.75)" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Dokumen Transkip Nilai</label>
+						<div class="col-4"><input type="file" class="form-control" name="doktranskip" /></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Apakah Sudah mengikuti / dalam proses pelamaran program diklat Pusbindiklatren?</label>
+						<div class="col-4">
+							<select name="wilayah" id="wilayah" class="form-control">
+								<option value="">--- Pilih Kategori ---</option>
+								<option value="ya">YA</option>
+								<option value="tisak">TIDAK</option>
+							</select>
+						</div>
+					</div>
+					<h5 class="modal-title">PILIHAN NON GELAR</h5>
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Pilih Pelatihan</label>
+						<div class="col-2">
+							<select name="urutan_ngds" id="urutan_ngds" class="form-control">
+								<option value="">Pilih-</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+							</select>
+						</div>
+						<td>
+						<div class="col-4">
+							<select name="pil1_ngds" id="pil1_ngds" required class="form-control">
+	                          	<option value="">-- Pilih --</option>
+							  	<option value="00063">PPP DOMESTIC</option>
+	                          	<option value="0006c">PPD RPJM</option>
+	                          	<option value="000b8">City Planning</option>
+	                          	<option value="000b7">Perencanaan Lingkungan</option>                          
+	                          	<option value="0002c">Monitoring dan Evaluasi</option>
+	                          	<option value="000ac">Planning & Budgeting</option>
+	                          	<option value="000a0">Mitigasi Bencana</option>                      
+	                          	<option value="00062">LERD</option>
+	                          	<option value="000bb">Seminar Internasional</option>						  
+	                      	</select>
+						</div>
+						<div class="col-4">
+							<select name="pil2_ngds" id="pil2_ngds" required class="form-control">
+	                          	<option value="">-- Pilih --</option>
+							  	<option value="00063">PPP DOMESTIC</option>
+	                          	<option value="0006c">PPD RPJM</option>
+	                          	<option value="000b8">City Planning</option>
+	                          	<option value="000b7">Perencanaan Lingkungan</option>                          
+	                          	<option value="0002c">Monitoring dan Evaluasi</option>
+	                          	<option value="000ac">Planning & Budgeting</option>
+	                          	<option value="000a0">Mitigasi Bencana</option>                      
+	                          	<option value="00062">LERD</option>
+	                          	<option value="000bb">Seminar Internasional</option>						  
+	                      	</select>
+						</div>
+					</div>
+					<h5 class="modal-title">URAIAN</h5>
+					<div class="form-group row">
+						<label class="col-4 col-form-label">Uraikan secara singkat pekerjaan Saudara saat ini</label>
+						<div class="col">
+							<textarea class="form-control" rows="3" name="pekerjaan"></textarea>
+						</div>
+					</div><div class="form-group row">
+						<label class="col-2 col-form-label">Latar Belakang mengikuti Pelatihan</label>
+						<div class="col">
+							<textarea class="form-control" rows="3" name="latarbelakang"></textarea>
+						</div>
+					</div><div class="form-group row">
+						<label class="col-2 col-form-label">Tujuan mengikuti Pelatihan</label>
+						<div class="col">
+							<textarea class="form-control" rows="3" name="tujuan"></textarea>
+						</div>
+					</div><div class="form-group row">
+						<label class="col-2 col-form-label">>Output/Hasil yg Diharapkan dari Pelatihan</label>
+						<div class="col">
+							<textarea class="form-control" rows="3" name="output"></textarea>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="offset-sm-2 col-sm-10">
+							<button type="submit" class="btn btn-primary">Simpan</button>
+							<button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script type="application/javascript">
+	$(document).ready(function() {
+		$('#ks-table').bootstrapTable({
+			icons: {
+				refresh: 'la la-refresh icon-refresh',
+				toggle: 'la la-list-alt icon-list-alt',
+				columns: 'la la-th icon-th',
+				share: 'la la-download icon-share'
+			}
+		});
+
+		$('select.form-control').select2({
+			dropdownAutoWidth : true
+		});
+		$('select#pilih_peserta').select2({
+			width: '400px',
+			tags: true,
+			dropdownParent: $('#non_gelar_modal')
+		});\\
+		$('#jenis_pembayaran').select2({
+			width: '300px'
+		});
+		$('#select-bulan').select2({
+			width: '200px'
+		});
+	});
+</script>
