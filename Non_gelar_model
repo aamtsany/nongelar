@@ -1,0 +1,258 @@
+<?php  if (! defined('BASEPATH')) {exit('No direct script access allowed');}
+	/**
+	* Name: karyasiswa_model
+	* Author: maulanaoldies
+	*
+	* Requirements: PHP5 or above
+	*
+	*/
+
+class Non_gelar_model extends CI_Model
+{
+	/**
+	 * view_peserta dan t_datadiri and update t_datadiri MODEL
+	 */
+	
+	// public function __construct()
+	// {
+	// 	parent::__construct();
+	// 	$this->db_admin = $this->load->database('simdiklat', true);
+	// }
+	public function getLastID()
+	{
+		$this->db->select('id_datadiri');
+		$this->db->limit(1);
+		$this->db->order_by('tgl_akun_dibuat', 'desc');
+		$query = $this->db->get('t_datadiri');
+		return $query->result();	
+	}
+	function insert ($data)
+	{
+		if($this->db->insert('t_datadiri',$data)){
+			// echo "Berhasil";
+			// die();
+			return TRUE;
+		}else{
+			// echo "Gagal";
+			return FALSE;
+		}
+	}
+
+	function get($filter = null)
+	{
+		if ($filter) {
+			$this->db->where($filter);
+		}
+		$this->db->order_by('tahun', 'DESC');
+		$q = $this->db->get('view_peserta');
+		return $q;
+	}
+
+	function get_datadiri($filter = null)
+	{
+		if ($filter) {
+			$this->db->where($filter);
+		}
+		$q = $this->db->get('t_datadiri');
+		return $q;
+	}
+
+	function get_meta_biodata($filter = NULL)
+	{
+		$this->db->select('id_datadiri, nip, nama, gelar_depan, gelar_belakang, gender, tmpt_lhr, tgl_lhr, almt_rmh, kab_rmh, prop_rmh, kodepos_rmh, telp_rmh, hp, email');
+		if($filter != NULL)
+		{
+			$this->db->where($filter);
+		}
+		return $this->db->get('t_datadiri');
+	}
+
+	function get_meta_instansi($filter = NULL)
+	{
+		$this->db->select('id_datadiri, nip, nama_inst, unit_kerja, jabatan, gol, almt_inst, prop_inst, kab_inst, telp_inst, kodepos_inst, fax, email_inst');
+		if($filter != NULL)
+		{
+			$this->db->where($filter);
+		}
+		return $this->db->get('t_datadiri');
+	}
+
+	function update_datadiri($key, $data)
+	{
+		$this->db->set($data);
+		$this->db->where($key);
+		$q = $this->db->update('t_datadiri');
+
+		if($q){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+
+	function update_meta_biodata($data)
+	{
+		$this->db->insert('b_datadiri',$data);
+	}
+
+	function update_meta_instansi($data)
+	{
+		$this->db->insert('b_instansi',$data);
+	}
+
+	function get_penempatan_jepang($filter = NULL)
+	{
+		if ($filter) {
+			$this->db->where($filter);
+		}
+		$this->db->join('ts_universitas ua','ua.id_master = r.univ1');
+		$this->db->join('ts_universitas ub','ub.id_master = r.univ2');
+		$this->db->join('ts_universitas uc','uc.id_master = r.univ3');
+		$this->db->join('ts_jurusan pa','pa.id_master = r.prodi1');
+		$this->db->join('ts_jurusan pb','pb.id_master = r.prodi2');
+		$this->db->join('ts_jurusan pc','pc.id_master = r.prodi3');
+		$q = $this->db->get('t_rencana_penempatan p');
+		return $q;
+	}
+	
+	function get_rencana_penempatan($filter = null)
+	{
+		if ($filter) {
+			$this->db->where($filter);
+		}
+		$q = $this->db->get('t_rencana_penempatan');
+		return $q;
+	}
+	
+	function update_rencana_penempatan($key, $data)
+	{
+		$this->db->where($key);
+		$q = $this->db->get('t_rencana_penempatan');
+		
+		if($q->num_rows() > 0){
+			$this->db->set($data);
+			$this->db->where($key);
+			$query = $this->db->update('t_rencana_penempatan');
+		}else{
+			$ex = array_merge($data,$key);
+			$query = $this->db->insert('t_rencana_penempatan',$ex);
+		}
+		
+		if($query){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+
+	function get_alamat_studi($filter)
+	{
+		$this->db->where($filter);
+		$q = $this->db->get('s_alamat_studi');
+
+		if($q->num_rows()>0)
+		{
+			return $q;
+		}else{
+			return False;
+		}
+	}
+	
+	function update_alamat_studi($input, $data)
+	{
+		$this->db->insert('s_alamat_studi',$data);
+		$this->db->insert('s_alamat_studi',$input);
+		
+		return true;	
+	}
+
+	function save_dokumen($data,$w)
+	{
+		$this->db->where($w);
+		$q = $this->db->get('t_rencana_penempatan');
+		
+		if($q->num_rows() > 0){
+			$this->db->set($data);
+			$this->db->where($w);
+			$query = $this->db->update('t_rencana_penempatan');
+		}else{
+			$ex = array_merge($data,$w);
+			$query = $this->db->insert('t_rencana_penempatan',$ex);
+		}
+		
+		if($query){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+	
+	function cek_penempatan($filter)
+	{
+		$this->db->where($filter);
+		$q = $this->db->get('t_rencana_penempatan');
+		
+		if($q->num_rows() > 0){
+			return true;
+		}else{
+			if($this->db->insert('t_rencana_penempatan',$filter)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	function get_nongelar($filter = null)
+	{
+		if ($filter) {
+			$this->db->where($filter);
+		}
+		$this->db->order_by('tahun', 'DESC');
+		$q = $this->db->get('view_nongelar2');
+		return $q;
+	}
+	function get_any($table, $filter = null)
+	{
+		if ($filter) {
+			$this->db->where($filter);
+		}
+		$q = $this->db->get($table);
+		return $q;
+	}
+	function get_prov()
+	{		
+		$x = $this->db->get('ddn_uk_provinsi');
+		return $x->result();
+	}
+	function get_kab()
+	{
+		$z = $this->db->get('ddn_uk_kabupaten');
+		return $z->result();
+	}
+	function get_inst()
+	{
+		$y = $this->db->get('ddn_instansi');
+		return $y->result();
+	}
+	function get_jabatan()
+	{
+		$this->db->where('tgroup', 'pangkat');
+		$y = $this->db->get('ts_masters');
+		return $y->result();
+	}
+	function get_pendakhir()
+	{
+		$this->db->where('tgroup', 'pddkn');
+		$y = $this->db->get('ts_masters');
+		return $y->result();
+	}
+	public function getSingleNonGelar($id)
+	{
+		$this->db->select('*');
+		$this->db->from('t_datadiri');
+		// $this->db->join('', '', 'left');
+		$this->db->where('id_datadiri', $id);
+		$var=  $this->db->get('');
+		return $var->result();
+	}
+}
